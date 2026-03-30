@@ -31,6 +31,7 @@
             <ComboBox x:Name="cmbManufacturer" Width="200" Height="32" DisplayMemberPath="name"
               SelectionChanged="cmbManufacturer_SelectionChanged" FontSize="14"/>
         </StackPanel>
+        <!--Категории комплект.-->
         <ListBox x:Name="lstCategories" Grid.Row="1" Grid.Column="0" Margin="10" 
           SelectionChanged="lstCategories_SelectionChanged"
           FontSize="14" BorderThickness="1">
@@ -40,5 +41,23 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
+        <!--Список комплектующих-->
+        <ListView x:Name="lvParts" Grid.Row="1" Grid.Column="1" Margin="10" 
+          SelectionMode="Single" MouseDoubleClick="lvParts_MouseDoubleClick">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Изображение" Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Image Source="{Binding image}" Width="70" Height="70" Stretch="Uniform"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Название" Width="280" DisplayMemberBinding="{Binding name}"/>
+                    <GridViewColumn Header="Производитель" Width="140" DisplayMemberBinding="{Binding manufacturer_.name}"/>
+                    <GridViewColumn Header="Цена" Width="100" DisplayMemberBinding="{Binding price, StringFormat={}{0:C}}"/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
