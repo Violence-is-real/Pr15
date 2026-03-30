@@ -42,6 +42,39 @@ namespace Pr15
 
                 lvAssemblies.ItemsSource = assemblies;
         }
-        
+        private void lvAssemblies_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (lvAssemblies.SelectedItem == null)
+            {
+                lvAssemblyParts.ItemsSource = null;
+                return;
+            }
+
+            assembly_ selectedAssembly = lvAssemblies.SelectedItem as assembly_;
+            if (selectedAssembly == null) return;
+
+            // Загружаем комплектующие выбранной сборки
+            var parts = Core.Context.partassembly_
+                .Include("basepart_")
+                .Include("basepart_.manufacturer_")
+                .Where(pa => pa.assemblyid == selectedAssembly.id)
+                .ToList();
+
+            // Для отображения в ListView создаём удобный список
+            var displayList = new List<PartDisplay>();
+            foreach (var pa in parts)
+            {
+                if (pa.basepart_ != null)
+                {
+                    displayList.Add(new PartDisplay
+                    {
+                        name = pa.basepart_.name,
+                        manufacturer = pa.basepart_.manufacturer_ != null ? pa.basepart_.manufacturer_.name : "—",
+                        price = pa.basepart_.price
+                    });
+                }
+            }
+            lvAssemblyParts.ItemsSource = displayList;
+        }
     }
 }
