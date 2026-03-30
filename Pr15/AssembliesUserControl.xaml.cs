@@ -25,6 +25,12 @@ namespace Pr15
             InitializeComponent();
             LoadAssemblies();
         }
+        public class PartDisplay
+        {
+            public string name { get; set; }
+            public string manufacturer { get; set; }
+            public decimal price { get; set; }
+        }
         private void LoadAssemblies()
         {
                 // Загружаем все сборки с комплектующими
@@ -35,6 +41,7 @@ namespace Pr15
                     .ToList();
 
                 lvAssemblies.ItemsSource = assemblies;
-            }
+        }
+        
     }
 }
