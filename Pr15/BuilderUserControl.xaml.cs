@@ -33,7 +33,7 @@ namespace Pr15
             { "Блок питания", 6 },
             { "Кулер для процессора", 7 },
             { "Накопитель", 8 }
-        };  
+        };
         public BuilderUserControl()
         {
             InitializeComponent();
@@ -47,7 +47,36 @@ namespace Pr15
             cmbManufacturer.SelectedIndex = 0;
 
             //Категории
-            lstCategories.ItemsSource = _categories.Keys.ToList();;
+            lstCategories.ItemsSource = _categories.Keys.ToList();
+
+            //Загрузка данных
+            FilterParts();
+        }
+        private void FilterParts()
+        {
+            var query = Core.Context.basepart_
+                .Include("manufacturer_")
+                .Include("parttype_")
+                .AsQueryable();
+
+            //Фильтрация (категория)
+            if (lstCategories.SelectedItem is string selectedCategory &&
+                _categories.TryGetValue(selectedCategory, out int typeId))
+            {
+                query = query.Where(p => p.parttypeid == typeId);
+            }
+            //Фильтрация (Производитель)
+            if (cmbManufacturer.SelectedItem is manufacturer_ man && man.id != 0)
+            { 
+                query = query.Where(p => p.manufacturerid == man.id);
+            }
+            // Поиск по названию
+            string search = txtSearch.Text?.Trim().ToLower();
+            if (!string.IsNullOrEmpty(search)) 
+            { 
+                query = query.Where(p => p.name.ToLower().Contains(search)); 
+            }
+            lvParts.ItemsSource = query.ToList();
         }
     }
 }
