@@ -13,14 +13,23 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>
-            <!-- Категории -->
+            <!--Категории-->
             <ColumnDefinition Width="2*"/>
-            <!-- Список комплектующих -->
+            <!--Список комплектующих-->
             <ColumnDefinition Width="300"/>
-            <!-- Выбранные комплектующие -->
+            <!--Выбранные комплектующие-->
             <ColumnDefinition Width="280"/>
-            <!-- Боковая панель (цена + сохранение) -->
+            <!--цена + сохранение-->
         </Grid.ColumnDefinitions>
+        
+        <StackPanel Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" Margin="10,10,10,5">
+            <TextBlock Text="Поиск:" Margin="0,5,5,0" FontSize="14" VerticalAlignment="Center"/>
+            <TextBox x:Name="txtSearch" Width="280" Height="32" TextChanged="txtSearch_TextChanged" 
+             FontSize="14" Padding="5"/>
 
+            <TextBlock Text="Производитель:" Margin="20,5,5,0" FontSize="14" VerticalAlignment="Center"/>
+            <ComboBox x:Name="cmbManufacturer" Width="200" Height="32" DisplayMemberPath="name"
+              SelectionChanged="cmbManufacturer_SelectionChanged" FontSize="14"/>
+        </StackPanel>
     </Grid>
 </UserControl>
