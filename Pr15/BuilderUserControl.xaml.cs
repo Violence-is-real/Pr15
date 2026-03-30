@@ -37,8 +37,17 @@ namespace Pr15
         public BuilderUserControl()
         {
             InitializeComponent();
-            
+            LoadData();
+
         }
-       
+        private void LoadData()
+        {
+            //Производители
+            cmbManufacturer.ItemsSource = Core.Context.manufacturer_.OrderBy(m => m.name).ToList();
+            cmbManufacturer.SelectedIndex = 0;
+
+            //Категории
+            lstCategories.ItemsSource = _categories.Keys.ToList();;
+        }
     }
 }
