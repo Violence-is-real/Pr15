@@ -23,6 +23,18 @@ namespace Pr15
         public AssembliesUserControl()
         {
             InitializeComponent();
+            LoadAssemblies();
         }
+        private void LoadAssemblies()
+        {
+                // Загружаем все сборки с комплектующими
+                var assemblies = Core.Context.assembly_
+                    .Include("partassembly_")
+                    .Include("partassembly_.basepart_")
+                    .Include("partassembly_.basepart_.manufacturer_")
+                    .ToList();
+
+                lvAssemblies.ItemsSource = assemblies;
+            }
     }
 }
