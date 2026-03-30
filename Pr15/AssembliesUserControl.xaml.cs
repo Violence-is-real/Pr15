@@ -76,5 +76,9 @@ namespace Pr15
             }
             lvAssemblyParts.ItemsSource = displayList;
         }
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            LoadAssemblies();
+        }
     }
 }
