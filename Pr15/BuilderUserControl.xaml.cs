@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,6 +21,19 @@ namespace Pr15
     /// </summary>
     public partial class BuilderUserControl : UserControl
     {
+        private ObservableCollection<basepart_> _selectedParts = new ObservableCollection<basepart_>();
+
+        private readonly Dictionary<string, int> _categories = new Dictionary<string, int>
+        {
+            { "Процессор", 1 },
+            { "Видеокарта", 2 },
+            { "Оперативная память", 3 },
+            { "Материнская плата", 4 },
+            { "Корпус", 5 },
+            { "Блок питания", 6 },
+            { "Кулер для процессора", 7 },
+            { "Накопитель", 8 }
+        };  
         public BuilderUserControl()
         {
             InitializeComponent();
