@@ -206,6 +206,41 @@ namespace Pr15
             _selectedParts.Clear();
             UpdateUI();
         }
+        private void btnSave_Click(object sender, RoutedEventArgs e)
+        {
+            if (string.IsNullOrWhiteSpace(txtAssemblyName.Text))
+            {
+                MessageBox.Show("Введите название сборки!", "Ошибка");
+                return;
+            }
+                var assembly = new assembly_
+                {
+                    name = txtAssemblyName.Text.Trim(),
+                    author = txtAuthor.Text.Trim()
+                }
+                ;
 
+                Core.Context.assembly_.Add(assembly);
+                Core.Context.SaveChanges();
+
+                foreach (var part in _selectedParts)
+                {
+                    Core.Context.partassembly_.Add(new partassembly_
+                    {
+                        partid = part.id,
+                        assemblyid = assembly.id
+                    });
+                }
+
+                Core.Context.SaveChanges();
+
+                MessageBox.Show($"Сборка «{assembly.name}» успешно сохранена!", "Успех",
+                    MessageBoxButton.OK, MessageBoxImage.Information);
+
+                _selectedParts.Clear();
+                txtAssemblyName.Clear();
+                UpdateUI();              
+        }
     }
 }
+
