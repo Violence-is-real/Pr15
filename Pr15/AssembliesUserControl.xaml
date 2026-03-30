@@ -15,6 +15,25 @@
 
         <TextBlock Text="Сохранённые сборки" 
                FontSize="22" FontWeight="Bold" Margin="0,0,0,15"/>
-
+        <!--Список сборок-->
+        <ListView x:Name="lvAssemblies" Grid.Row="1" 
+           SelectionChanged="lvAssemblies_SelectionChanged">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header="Название сборки" Width="380" 
+                             DisplayMemberBinding="{Binding name}"/>
+                    <GridViewColumn Header="Автор" Width="200" 
+                             DisplayMemberBinding="{Binding author}"/>
+                    <GridViewColumn Header="Цена" Width="150">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=id}" 
+                                    FontWeight="SemiBold"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </UserControl>
