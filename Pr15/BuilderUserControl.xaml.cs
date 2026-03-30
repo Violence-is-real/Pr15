@@ -146,5 +146,17 @@ namespace Pr15
                 ? "Комплектующие полностью совместимы"
                 : $"Обнаружены проблемы совместимости:\n• {string.Join("\n• ", issues)}";
         }
+        private void UpdateUI()
+        {
+            decimal total = _selectedParts.Sum(p => p.price);
+            txtTotalPrice.Text = $"{total:N0} ₽";
+
+            txtCompatibility.Text = CheckCompatibility();
+            txtCompatibility.Foreground = txtCompatibility.Text.Contains("✅")
+                ? System.Windows.Media.Brushes.DarkGreen
+                : System.Windows.Media.Brushes.Red;
+
+            btnSave.IsEnabled = _selectedParts.Count > 0;
+        }
     }
 }
