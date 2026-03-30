@@ -164,7 +164,6 @@ namespace Pr15
             basepart_ part = lvParts.SelectedItem as basepart_;
             if (part == null) return;
 
-            // Проверяем, не добавлено ли уже
             bool alreadyAdded = false;
             foreach (var p in _selectedParts)
             {
@@ -193,5 +192,20 @@ namespace Pr15
                 UpdateUI();
             }
         }
+
+        private void btnRemove_Click(object sender, RoutedEventArgs e)
+        {
+            if (lvSelected.SelectedItem is basepart_ part)
+            {
+                _selectedParts.Remove(part);
+                UpdateUI();
+            }
+        }
+        private void btnClear_Click(object sender, RoutedEventArgs e)
+        {
+            _selectedParts.Clear();
+            UpdateUI();
+        }
+
     }
 }
