@@ -34,9 +34,21 @@ namespace Pr15
             { "Кулер для процессора", 7 },
             { "Накопитель", 8 }
         };
+        private readonly Dictionary<int, string> _categoryNames = new Dictionary<int, string>
+        {
+            { 1, "Процессор" },
+            { 2, "Видеокарта" },
+            { 3, "Оперативная память" },
+            { 4, "Материнская плата" },
+            { 5, "Корпус" },
+            { 6, "Блок питания" },
+            { 7, "Кулер для процессора" },
+            { 8, "Накопитель" }
+        };
         public BuilderUserControl()
         {
             InitializeComponent();
+            lvSelected.ItemsSource = _selectedParts;
             LoadData();
 
         }
@@ -179,9 +191,30 @@ namespace Pr15
                 MessageBox.Show("Это комплектующее уже добавлено в сборку!", "Внимание");
                 return;
             }
+            if (IsCategoryAlreadySelected(part.parttypeid))
+            {
+                string categoryName = _categoryNames.ContainsKey(part.parttypeid)
+                    ? _categoryNames[part.parttypeid]
+                    : "данной категории";
+
+                MessageBox.Show($"В сборке уже есть комплектующее категории «{categoryName}».\n\n" +
+                                "Нельзя добавить второе комплектующее из одной категории.",
+                                "Ошибка совместимости",
+                                MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             _selectedParts.Add(part);
             UpdateUI();
+        }
+        private bool IsCategoryAlreadySelected(int partTypeId)
+        {
+            foreach (var part in _selectedParts)
+            {
+                if (part.parttypeid == partTypeId)
+                    return true;
+            }
+            return false;
         }
 
         private void lvSelected_MouseDoubleClick(object sender, MouseButtonEventArgs e)
