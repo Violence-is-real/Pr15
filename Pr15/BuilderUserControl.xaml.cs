@@ -55,8 +55,17 @@ namespace Pr15
         private void LoadData()
         {
             //Производители
-            cmbManufacturer.ItemsSource = Core.Context.manufacturer_.OrderBy(m => m.name).ToList();
-            cmbManufacturer.SelectedIndex = 0;
+            var manufacturers = Core.Context.manufacturer_.OrderBy(m => m.name).ToList();
+
+            // Создаём специальный объект "Все"
+            var allManufacturers = new List<manufacturer_>
+            {
+                new manufacturer_ { id = 0, name = "Все производители" }
+            };
+            allManufacturers.AddRange(manufacturers);
+
+            cmbManufacturer.ItemsSource = allManufacturers;
+            cmbManufacturer.SelectedIndex = 0; // По умолчанию "Все производители"
 
             //Категории
             lstCategories.ItemsSource = _categories.Keys.ToList();
@@ -78,9 +87,16 @@ namespace Pr15
                 query = query.Where(p => p.parttypeid == typeId);
             }
             //Фильтрация (Производитель)
-            if (cmbManufacturer.SelectedItem is manufacturer_ man && man.id != 0)
-            { 
-                query = query.Where(p => p.manufacturerid == man.id);
+            if (cmbManufacturer.SelectedItem != null)
+            {
+                manufacturer_ selectedMan = cmbManufacturer.SelectedItem as manufacturer_;
+
+                // Если выбран НЕ "Все производители" (Id != 0), то применяем фильтр
+                if (selectedMan != null && selectedMan.id != 0)
+                {
+                    query = query.Where(p => p.manufacturerid == selectedMan.id);
+                }
+                // Если Id == 0 — показываем все, фильтр не применяется
             }
             // Поиск по названию
             string search = txtSearch.Text?.Trim().ToLower();
@@ -165,7 +181,7 @@ namespace Pr15
             txtTotalPrice.Text = $"{total:N0} ₽";
 
             txtCompatibility.Text = CheckCompatibility();
-            txtCompatibility.Foreground = txtCompatibility.Text.Contains("✅")
+            txtCompatibility.Foreground = txtCompatibility.Text.Contains("1")
                 ? System.Windows.Media.Brushes.DarkGreen
                 : System.Windows.Media.Brushes.Red;
 
