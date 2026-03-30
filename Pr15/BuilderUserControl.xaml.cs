@@ -146,6 +146,7 @@ namespace Pr15
                 ? "Комплектующие полностью совместимы"
                 : $"Обнаружены проблемы совместимости:\n• {string.Join("\n• ", issues)}";
         }
+        //Обновление интерфейса
         private void UpdateUI()
         {
             decimal total = _selectedParts.Sum(p => p.price);
@@ -157,6 +158,40 @@ namespace Pr15
                 : System.Windows.Media.Brushes.Red;
 
             btnSave.IsEnabled = _selectedParts.Count > 0;
+        }
+        private void lvParts_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            basepart_ part = lvParts.SelectedItem as basepart_;
+            if (part == null) return;
+
+            // Проверяем, не добавлено ли уже
+            bool alreadyAdded = false;
+            foreach (var p in _selectedParts)
+            {
+                if (p.id == part.id)
+                {
+                    alreadyAdded = true;
+                    break;
+                }
+            }
+
+            if (alreadyAdded)
+            {
+                MessageBox.Show("Это комплектующее уже добавлено в сборку!", "Внимание");
+                return;
+            }
+
+            _selectedParts.Add(part);
+            UpdateUI();
+        }
+
+        private void lvSelected_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (lvSelected.SelectedItem is basepart_ part)
+            {
+                _selectedParts.Remove(part);
+                UpdateUI();
+            }
         }
     }
 }
