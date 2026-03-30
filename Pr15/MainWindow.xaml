@@ -7,6 +7,18 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <TabControl Margin="15" FontSize="15">
+
+            <!-- Вкладка создания сборки -->
+            <TabItem Header="Создать сборку">
+                <local:BuilderUserControl/>
+            </TabItem>
+
+            <!-- Вкладка просмотра сборок -->
+            <TabItem Header="Сохранённые сборки">
+                <local:AssembliesUserControl/>
+            </TabItem>
+
+        </TabControl>
     </Grid>
 </Window>
