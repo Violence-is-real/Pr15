@@ -35,5 +35,20 @@
                 </GridView>
             </ListView.View>
         </ListView>
+        <!--Список комплектующих сборки-->
+        <GroupBox Header="Состав сборки" Grid.Row="2" Margin="0,15,0,0" Padding="10">
+            <ListView x:Name="lvAssemblyParts" Height="280">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Комплектующее" Width="420" 
+                                DisplayMemberBinding="{Binding name}"/>
+                        <GridViewColumn Header="Производитель" Width="220" 
+                                DisplayMemberBinding="{Binding manufacturer}"/>
+                        <GridViewColumn Header="Цена" Width="140" 
+                                DisplayMemberBinding="{Binding price, StringFormat={}{0:N0} ₽}"/>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </GroupBox>
     </Grid>
 </UserControl>
