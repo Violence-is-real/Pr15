@@ -50,5 +50,7 @@
                 </ListView.View>
             </ListView>
         </GroupBox>
+        <Button Content="Обновить список" HorizontalAlignment="Right" VerticalAlignment="Top"
+          Width="140" Height="35" Click="btnRefresh_Click"/>
     </Grid>
 </UserControl>
