@@ -78,5 +78,73 @@ namespace Pr15
             }
             lvParts.ItemsSource = query.ToList();
         }
+        //Обработка фильтров 
+        private void txtSearch_TextChanged(object sender, TextChangedEventArgs e) => FilterParts();
+        private void cmbManufacturer_SelectionChanged(object sender, SelectionChangedEventArgs e) => FilterParts();
+        private void lstCategories_SelectionChanged(object sender, SelectionChangedEventArgs e) => FilterParts();
+        private string CheckCompatibility()
+        {
+            if (_selectedParts.Count == 0) return "Выберите комплектующие для проверки";
+
+            var cpu = _selectedParts.FirstOrDefault(p => p.parttypeid == 1);
+            var mb = _selectedParts.FirstOrDefault(p => p.parttypeid == 4);
+            var cooler = _selectedParts.FirstOrDefault(p => p.parttypeid == 7);
+            var ram = _selectedParts.FirstOrDefault(p => p.parttypeid == 3);
+            var casep = _selectedParts.FirstOrDefault(p => p.parttypeid == 5);
+            var psu = _selectedParts.FirstOrDefault(p => p.parttypeid == 6);
+            var gpu = _selectedParts.FirstOrDefault(p => p.parttypeid == 2);
+
+            List<string> issues = new List<string>();
+
+            // Сокет CPU + Мать + Кулер
+            if (cpu != null && mb != null)
+            {
+                var cpuDb = Core.Context.cpu_.Find(cpu.id);
+                var mbDb = Core.Context.motherboard_.Find(mb.id);
+                if (cpuDb?.socketid != mbDb?.socketid)
+                    issues.Add("Сокет процессора не совпадает с сокетом материнской платы");
+            }
+
+            if (cpu != null && cooler != null)
+            {
+                var cpuDb = Core.Context.cpu_.Find(cpu.id);
+                bool compatible = Core.Context.socketprocessorcooler_
+                    .Any(s => s.socketid == cpuDb.socketid && s.processorcoolerid == cooler.id);
+                if (!compatible)
+                    issues.Add("Кулер не поддерживает сокет процессора");
+            }
+
+            // Форм-фактор матери + Корпус
+            if (mb != null && casep != null)
+            {
+                var mbDb = Core.Context.motherboard_.Find(mb.id);
+                bool ok = Core.Context.boardformfactorcase_
+                    .Any(b => b.caseid == casep.id && b.formfactorid == mbDb.formfactorid);
+                if (!ok)
+                    issues.Add("Форм-фактор материнской платы не подходит к корпусу");
+            }
+
+            // Тип памяти
+            if (mb != null && ram != null)
+            {
+                var mbDb = Core.Context.motherboard_.Find(mb.id);
+                var ramDb = Core.Context.ram_.Find(ram.id);
+                if (mbDb?.memorytypeid != ramDb?.memorytypeid)
+                    issues.Add("Тип памяти не совпадает с поддержкой материнской платы");
+            }
+
+            // Мощность бл. питания
+            if (gpu != null && psu != null)
+            {
+                var gpuDb = Core.Context.gpu_.Find(gpu.id);
+                var psuDb = Core.Context.powersupply_.Find(psu.id);
+                if (psuDb.power < (gpuDb.recommendpower ?? 0))
+                    issues.Add($"Блок питания слишком слабый (рекомендуется минимум {gpuDb.recommendpower} Вт)");
+            }
+
+            return issues.Count == 0
+                ? "Комплектующие полностью совместимы"
+                : $"Обнаружены проблемы совместимости:\n• {string.Join("\n• ", issues)}";
+        }
     }
 }
