@@ -31,5 +31,14 @@
             <ComboBox x:Name="cmbManufacturer" Width="200" Height="32" DisplayMemberPath="name"
               SelectionChanged="cmbManufacturer_SelectionChanged" FontSize="14"/>
         </StackPanel>
+        <ListBox x:Name="lstCategories" Grid.Row="1" Grid.Column="0" Margin="10" 
+          SelectionChanged="lstCategories_SelectionChanged"
+          FontSize="14" BorderThickness="1">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" Padding="5" FontSize="15"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>
