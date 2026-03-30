@@ -37,6 +37,8 @@ namespace Pr15
         public BuilderUserControl()
         {
             InitializeComponent();
+            
         }
+       
     }
 }

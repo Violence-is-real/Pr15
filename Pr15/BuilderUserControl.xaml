@@ -7,7 +7,20 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        
-            
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <!-- Категории -->
+            <ColumnDefinition Width="2*"/>
+            <!-- Список комплектующих -->
+            <ColumnDefinition Width="300"/>
+            <!-- Выбранные комплектующие -->
+            <ColumnDefinition Width="280"/>
+            <!-- Боковая панель (цена + сохранение) -->
+        </Grid.ColumnDefinitions>
+
     </Grid>
 </UserControl>
