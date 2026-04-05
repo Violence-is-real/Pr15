@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Automation.Peers;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -16,6 +18,7 @@ using System.Windows.Shapes;
 
 namespace Pr15
 {
+    
     /// <summary>
     /// Логика взаимодействия для BuilderUserControl.xaml
     /// </summary>
@@ -45,18 +48,17 @@ namespace Pr15
             { 7, "Кулер для процессора" },
             { 8, "Накопитель" }
         };
+       
         public BuilderUserControl()
         {
             InitializeComponent();
             lvSelected.ItemsSource = _selectedParts;
             LoadData();
-
         }
         private void LoadData()
         {
             //Производители
             var manufacturers = Core.Context.manufacturer_.OrderBy(m => m.name).ToList();
-
             // Создаём специальный объект "Все"
             var allManufacturers = new List<manufacturer_>
             {
@@ -71,7 +73,8 @@ namespace Pr15
             lstCategories.ItemsSource = _categories.Keys.ToList();
 
             //Загрузка данных
-            FilterParts();
+            FilterParts();  
+
         }
         private void FilterParts()
         {
@@ -91,20 +94,19 @@ namespace Pr15
             {
                 manufacturer_ selectedMan = cmbManufacturer.SelectedItem as manufacturer_;
 
-                // Если выбран НЕ "Все производители" (Id != 0), то применяем фильтр
                 if (selectedMan != null && selectedMan.id != 0)
                 {
                     query = query.Where(p => p.manufacturerid == selectedMan.id);
                 }
-                // Если Id == 0 — показываем все, фильтр не применяется
             }
             // Поиск по названию
             string search = txtSearch.Text?.Trim().ToLower();
-            if (!string.IsNullOrEmpty(search)) 
-            { 
-                query = query.Where(p => p.name.ToLower().Contains(search)); 
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(p => p.name.ToLower().Contains(search));
             }
             lvParts.ItemsSource = query.ToList();
+            
         }
         //Обработка фильтров 
         private void txtSearch_TextChanged(object sender, TextChangedEventArgs e) => FilterParts();

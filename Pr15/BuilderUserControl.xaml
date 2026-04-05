@@ -56,6 +56,7 @@
                     <GridViewColumn Header="Название" Width="280" DisplayMemberBinding="{Binding name}"/>
                     <GridViewColumn Header="Производитель" Width="140" DisplayMemberBinding="{Binding manufacturer_.name}"/>
                     <GridViewColumn Header="Цена" Width="100" DisplayMemberBinding="{Binding price, StringFormat={}{0:C}}"/>
+                    <GridViewColumn Header="Характеристики" Width="300" DisplayMemberBinding="{Binding Details}" />
                 </GridView>
             </ListView.View>
         </ListView>
